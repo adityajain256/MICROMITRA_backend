@@ -14,25 +14,26 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
   name      String?
   password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  city      String?
   phone     String?
-  role      Role       @default(JOBSEEKER)
-  jobSeeker JobSeeker?
+  role      Role     @default(JOBSEEKER)
+
   recruter  Recruter?
+  jobSeeker JobSeeker?
 }
 
 model Recruter {
   id      Int    @id
   userId  Int    @unique
   company String
-  jobs    Job[]
   user    User   @relation(fields: [userId], references: [id])
+  jobs    Job[]
 }
 
 model JobSeeker {
@@ -47,13 +48,12 @@ model Job {
   id           Int           @id @default(autoincrement())
   title        String
   description  String
-  locationId   Int
   salary       Float
+  address      String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   recruiterId  Int
   applications Application[]
-  location     Location      @relation(fields: [locationId], references: [id])
   recruiter    Recruter      @relation(fields: [recruiterId], references: [id])
 }
 
@@ -65,15 +65,6 @@ model Application {
   appliedAt   DateTime          @default(now())
   job         Job               @relation(fields: [jobId], references: [id])
   jobSeeker   JobSeeker         @relation(fields: [jobSeekerId], references: [id])
-}
-
-model Location {
-  id        Int      @id @default(autoincrement())
-  latitude  Float
-  longitude Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  jobs      Job[]
 }
 
 enum Role {
