@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  name      String?
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  location  String?
+  phone     String?
+  role      Role       @default(JOBSEEKER)
+  jobSeeker JobSeeker?
+  recruter  Recruter?
+}
+
+model Recruter {
+  id      Int    @id
+  userId  Int    @unique
+  company String
+  jobs    Job[]
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model JobSeeker {
+  id           Int           @id
+  userId       Int           @unique
+  skills       Skill
+  applications Application[]
+  user         User          @relation(fields: [userId], references: [id])
+}
+
+model Job {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  locationId   Int
+  salary       Float
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  recruiterId  Int
+  applications Application[]
+  location     Location      @relation(fields: [locationId], references: [id])
+  recruiter    Recruter      @relation(fields: [recruiterId], references: [id])
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  jobId       Int
+  jobSeekerId Int
+  status      ApplicationStatus @default(PENDING)
+  appliedAt   DateTime          @default(now())
+  job         Job               @relation(fields: [jobId], references: [id])
+  jobSeeker   JobSeeker         @relation(fields: [jobSeekerId], references: [id])
+}
+
+model Location {
+  id        Int      @id @default(autoincrement())
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  jobs      Job[]
+}
+
+enum Role {
+  RECRUITER
+  JOBSEEKER
+}
+
+enum Skill {
+  FRONTEND
+  BACKEND
+  FULLSTACK
+  DATA_SCIENCE
+  LABOUR
+  MANAGEMENT
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
