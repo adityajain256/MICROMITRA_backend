@@ -14,47 +14,70 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   name      String?
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   city      String?
   phone     String?
-  role      Role     @default(JOBSEEKER)
-
+  role      Role       @default(JOBSEEKER)
   recruter  Recruter?
   jobSeeker JobSeeker?
 }
 
 model Recruter {
-  id      Int    @id
+  id      Int    @id @default(autoincrement())
   userId  Int    @unique
-  company String
+  company String @default("")
   user    User   @relation(fields: [userId], references: [id])
   jobs    Job[]
 }
 
 model JobSeeker {
-  id           Int           @id
-  userId       Int           @unique
-  skills       Skill
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  skills       JobSeekerSkill[]
   applications Application[]
-  user         User          @relation(fields: [userId], references: [id])
+}
+
+model JobSeekerSkill {
+  jobSeekerId Int
+  skillId     Int
+
+  jobSeeker JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  skill     Skill     @relation(fields: [skillId], references: [id])
+
+  @@id([jobSeekerId, skillId])
 }
 
 model Job {
-  id           Int           @id @default(autoincrement())
-  title        String
-  description  String
-  salary       Float
-  address      String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  recruiterId  Int
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  salary      Float?
+  address     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  recruiterId Int
+  recruiter   Recruter @relation(fields: [recruiterId], references: [id])
+
+  skills       JobSkill[]
   applications Application[]
-  recruiter    Recruter      @relation(fields: [recruiterId], references: [id])
+}
+
+model JobSkill {
+  jobId   Int
+  skillId Int
+
+  job   Job   @relation(fields: [jobId], references: [id])
+  skill Skill @relation(fields: [skillId], references: [id])
+
+  @@id([jobId, skillId])
 }
 
 model Application {
@@ -67,18 +90,16 @@ model Application {
   jobSeeker   JobSeeker         @relation(fields: [jobSeekerId], references: [id])
 }
 
+model Skill {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  jobSeekerSkills JobSeekerSkill[]
+  jobSkills       JobSkill[]
+}
+
 enum Role {
   RECRUITER
   JOBSEEKER
-}
-
-enum Skill {
-  FRONTEND
-  BACKEND
-  FULLSTACK
-  DATA_SCIENCE
-  LABOUR
-  MANAGEMENT
 }
 
 enum ApplicationStatus {
