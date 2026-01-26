@@ -18,6 +18,7 @@ model User {
   email     String     @unique
   name      String?
   password  String
+  picture   String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   city      String?
@@ -55,16 +56,18 @@ model JobSeekerSkill {
 }
 
 model Job {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   description String
-  salary      Float?
+  salary      String?
   address     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
+  jobPicture  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  jobStatus   jobStatus @default(OPEN)
+  jobType     JobType   @default(PART_TIME)
   recruiterId Int
-  recruiter   Recruter @relation(fields: [recruiterId], references: [id])
+  recruiter   Recruter  @relation(fields: [recruiterId], references: [id])
 
   skills       JobSkill[]
   applications Application[]
@@ -74,8 +77,8 @@ model JobSkill {
   jobId   Int
   skillId Int
 
-  job   Job   @relation(fields: [jobId], references: [id])
-  skill Skill @relation(fields: [skillId], references: [id])
+  job   Job?   @relation(fields: [jobId], references: [id])
+  skill Skill? @relation(fields: [skillId], references: [id])
 
   @@id([jobId, skillId])
 }
@@ -106,4 +109,16 @@ enum ApplicationStatus {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERN
+}
+
+enum jobStatus {
+  OPEN
+  CLOSED
 }

@@ -1,5 +1,12 @@
 import express from "express";
+import { authUser } from "../middleware/auth.middleware.js";
+import {
+  handlecreateJob,
+  handleGetAllJobs,
+} from "../controllers/job.controller.js";
+const jobRouter = express.Router();
 
-const recruiterRouter = express.Router();
+jobRouter.get("/", authUser, handleGetAllJobs);
+jobRouter.post("/", authUser, handlecreateJob);
 
-export default recruiterRouter;
+export default jobRouter;

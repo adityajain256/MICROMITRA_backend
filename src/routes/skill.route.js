@@ -1,5 +1,8 @@
 import express from "express";
 
-const recruiterRouter = express.Router();
+const skillRouter = express.Router();
 
-export default recruiterRouter;
+skillRouter.post("/createSkill", handleCreateSkill);
+skillRouter.delete("/deleteSkill", handleDeleteSkill);
+
+export default skillRouter;

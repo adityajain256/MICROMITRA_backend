@@ -51,7 +51,7 @@ export const handleLoginUser = async (req, res) => {
     });
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(402).json({ message: "bad request." });
+      return res.status(401).json({ message: "bad request." });
     }
     const token = jwt.sign({ id: user.id }, process.env.SECRET, {
       expiresIn: "7d",

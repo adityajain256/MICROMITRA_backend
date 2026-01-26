@@ -6,7 +6,7 @@ import {
 import { authUser } from "../middleware/auth.middleware.js";
 
 const userRouter = express.Router();
-userRouter.use(authUser);
+// userRouter.use(authUser);
 
 userRouter.get("/", handleGetAllUsers);
 userRouter.patch("/profileUpdate", handleUpdateUser);
