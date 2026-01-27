@@ -21,6 +21,20 @@ export const handleRegisterUser = async (req, res) => {
     const newUser = await prisma.user.create({
       data: { email, name, password: hashedPass, phone, role, city },
     });
+
+    if (role === "RECRUITER") {
+      await prisma.recruiter.create({
+        data: {
+          userId: newUser.id,
+        },
+      });
+    } else if (role === "JOB_SEEKER") {
+      await prisma.jobSeeker.create({
+        data: {
+          userId: newUser.id,
+        },
+      });
+    }
     const token = jwt.sign({ id: newUser.id }, process.env.SECRET, {
       expiresIn: "7d",
     });

@@ -103,6 +103,7 @@ model Skill {
 enum Role {
   RECRUITER
   JOBSEEKER
+  ADMIN
 }
 
 enum ApplicationStatus {

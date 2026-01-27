@@ -1,8 +1,8 @@
 import prisma from "../../connection/prisma.js";
 
 export const hadnleUpdateJobSeekerProfile = async (req, res) => {
-  const { name } = req.body;
-  if (!name) {
+  const { skillId } = req.body;
+  if (!skillId) {
     return res.status(400).json({ error: "bad request" });
   }
   const user = req.user;
@@ -10,16 +10,16 @@ export const hadnleUpdateJobSeekerProfile = async (req, res) => {
     return res.status(403).json({ error: "forbidden access" });
   }
   try {
-    const jobSeeker = await prisma.jobSeeker.findUnique({
+    const jobSeeker = await prisma.jobSeeker.update({
       where: { userId: req.user.id },
-    });
-    if (!jobSeeker) {
-      await prisma.jobSeeker.create({
-        data: {
-          userId: req.user.id,
+      data: {
+        skills: {
+          connect: {
+            id: skillId,
+          },
         },
-      });
-    }
+      },
+    });
 
     res
       .status(200)

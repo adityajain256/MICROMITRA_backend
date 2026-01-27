@@ -12,17 +12,6 @@ export const hadnleUpdateRecruiterProfile = async (req, res) => {
     return res.status(403).json({ error: "forbidden access" });
   }
   try {
-    const recruiter = await prisma.recruter.findUnique({
-      where: { userId: req.user.id },
-    });
-    if (!recruiter) {
-      await prisma.recruter.create({
-        data: {
-          userId: req.user.id,
-          company,
-        },
-      });
-    }
     const updatedRecruter = await prisma.recruter.update({
       where: { userId: req.user.id },
       data: { company },
