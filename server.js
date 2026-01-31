@@ -7,11 +7,23 @@ import jobRouter from "./src/routes/job.route.js";
 import recruiterRouter from "./src/routes/recruiter.route.js";
 import jobseekerRouter from "./src/routes/jobseeker.route.js";
 import adminRouter from "./src/routes/admin.route.js";
+import cors from "cors";
+import databaseConnection from "./connection/databaseConnection.js";
+
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+databaseConnection();
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

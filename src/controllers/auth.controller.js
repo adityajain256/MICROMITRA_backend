@@ -46,7 +46,7 @@ export const handleRegisterUser = async (req, res) => {
       sameSite: "Strict",
     });
 
-    res.status(201).json({ message: newUser, token: token });
+    res.status(201).json({ message: newUser, token: token, ok: true });
   } catch (error) {
     res.status(500).json({ error: "internal server error" });
     console.log(error.message);
@@ -76,7 +76,7 @@ export const handleLoginUser = async (req, res) => {
       secure: process.env.ENVIRONMENT === "production",
       sameSite: "Strict",
     });
-    res.status(200).json({ message: "login successful", token: token });
+    res.status(200).json({ message: "login successful", token: token, ok: true });
   } catch (error) {
     res.status(500).json({ error: "internal server error" });
     console.error("Error during user login:", error);
