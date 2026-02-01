@@ -16,6 +16,21 @@ export const handleGetAllUsers = async (req, res) => {
   }
 };
 
+export const handleGetProfile = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+    });
+    if (!user) {
+      return res.status(404).json({ error: "user not found" });
+    }
+    res.status(200).json({ message: user, ok: true });
+  } catch (error) {
+    res.status(500).json({ error: "internal server error" });
+    console.error("Error fetching user profile:", error);
+  }
+};
+
 // update user profile
 export const handleUpdateUser = async (req, res) => {
   const { name, phone, city, password } = req.body;
@@ -36,6 +51,7 @@ export const handleUpdateUser = async (req, res) => {
 
 export const handleUploadProfilePicture = async (req, res) => {
   try {
+    let profileImageUrl = null;
     if (req.file) {
       const uploadFromBuffer = () =>
         new Promise((resolve, reject) => {
@@ -57,10 +73,11 @@ export const handleUploadProfilePicture = async (req, res) => {
 
     const updatedUser = await prisma.user.update({
       where: { id: req.user.id },
-      data: { picture: profileImageUrl.secure_url },
+      data: { picture: profileImageUrl },
     });
-    res.status(200).json({ message: updatedUser });
+    res.status(200).json({ message: profileImageUrl });
   } catch (error) {
     res.status(500).json({ error: "internal server error" });
+    console.error("Error uploading profile picture:", error);
   }
 };

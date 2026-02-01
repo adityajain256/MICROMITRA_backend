@@ -1,7 +1,13 @@
 import multer from "multer";
 
 const storage = multer.memoryStorage();
-const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg", "image/svg"];
+const allowedMimeTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/jpg",
+  "image/svg",
+  "image/avif",
+];
 const upload = multer({
   storage: storage,
   limits: { fileSize: 1024 * 1024 * 3 },

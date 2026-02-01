@@ -1,6 +1,7 @@
 import express from "express";
 import {
   handleGetAllUsers,
+  handleGetProfile,
   handleUpdateUser,
   handleUploadProfilePicture,
 } from "../controllers/user.controller.js";
@@ -11,6 +12,7 @@ const userRouter = express.Router();
 userRouter.use(authUser);
 
 userRouter.get("/", handleGetAllUsers);
+userRouter.get("/profile", handleGetProfile);
 userRouter.patch("/profileUpdate", handleUpdateUser);
 userRouter.patch(
   "/uploadProfilePicture",
