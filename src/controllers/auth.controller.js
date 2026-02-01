@@ -23,7 +23,7 @@ export const handleRegisterUser = async (req, res) => {
     });
 
     if (role === "RECRUITER") {
-      await prisma.recruiter.create({
+      await prisma.recruter.create({
         data: {
           userId: newUser.id,
         },
@@ -76,7 +76,9 @@ export const handleLoginUser = async (req, res) => {
       secure: process.env.ENVIRONMENT === "production",
       sameSite: "Strict",
     });
-    res.status(200).json({ message: "login successful", token: token, ok: true });
+    res
+      .status(200)
+      .json({ message: "login successful", token: token, ok: true });
   } catch (error) {
     res.status(500).json({ error: "internal server error" });
     console.error("Error during user login:", error);

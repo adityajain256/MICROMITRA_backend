@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../../connection/prisma.js";
 
 export const authUser = async (req, res, next) => {
-  const authHeader = req.headers.Authorization;
+  const authHeader = req.headers["Authorization".toLowerCase()];
 
   let token;
   if (authHeader) {
