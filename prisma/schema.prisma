@@ -56,19 +56,18 @@ model JobSeekerSkill {
 }
 
 model Job {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String
-  salary      String?
-  address     String
-  jobPicture  String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  jobStatus   jobStatus @default(OPEN)
-  jobType     JobType   @default(PART_TIME)
-  recruiterId Int
-  recruiter   Recruter  @relation(fields: [recruiterId], references: [id])
-
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  salary       String?
+  address      String
+  jobPicture   String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  jobStatus    jobStatus     @default(OPEN)
+  jobType      JobType       @default(PART_TIME)
+  recruiterId  Int
+  recruiter    Recruter      @relation(fields: [recruiterId], references: [id])
   skills       JobSkill[]
   applications Application[]
 }
@@ -91,6 +90,8 @@ model Application {
   appliedAt   DateTime          @default(now())
   job         Job               @relation(fields: [jobId], references: [id])
   jobSeeker   JobSeeker         @relation(fields: [jobSeekerId], references: [id])
+
+  @@unique([jobId, jobSeekerId])
 }
 
 model Skill {

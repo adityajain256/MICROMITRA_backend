@@ -1,4 +1,4 @@
-import prisma from "../../connection/prisma";
+import prisma from "../../connection/prisma.js";
 
 export const getSkills = async (req, res) => {
   try {

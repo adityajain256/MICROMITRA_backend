@@ -7,12 +7,17 @@ import jobRouter from "./src/routes/job.route.js";
 import recruiterRouter from "./src/routes/recruiter.route.js";
 import jobseekerRouter from "./src/routes/jobseeker.route.js";
 import adminRouter from "./src/routes/admin.route.js";
+import applicationRouter from "./src/routes/application.route.js";
+import skillRouter from "./src/routes/skill.route.js";
 import cors from "cors";
 import databaseConnection from "./connection/databaseConnection.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger.js";
 
 dotenv.config();
 
 const app = express();
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 const port = process.env.PORT || 3000;
 databaseConnection();
 
@@ -34,6 +39,8 @@ app.use("/api/jobs", jobRouter);
 app.use("/api/recruiter", recruiterRouter);
 app.use("/api/jobseeker", jobseekerRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/applications", applicationRouter);
+app.use("/api/skills", skillRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

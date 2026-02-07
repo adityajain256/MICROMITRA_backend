@@ -2,9 +2,22 @@ import prisma from "../../connection/prisma.js";
 
 export const handleGetAllJobs = async (req, res) => {
   try {
-    const jobs = await prisma.job.findMany();
+    const jobs = await prisma.job.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        recruiter: {
+          select: {
+            id: true,
+            company: true,
+          },
+        },
+        skills: true,
+      },
+    });
+    // console.log(jobs);
     res.status(200).json({ jobs });
   } catch (error) {
+    console.error("Error fetching jobs:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -58,5 +71,22 @@ export const handlecreateJob = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const handleGetMyJobs = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const jobs = await prisma.job.findMany({
+      where: {
+        recruiter: {
+          userId: userId,
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    res.status(200).json({ jobs });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };

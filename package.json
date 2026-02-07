@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "swagger": "node ./swagger.js"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,10 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "prisma": "^6.19.2",
-    "streamifier": "^0.1.1"
+    "streamifier": "^0.1.1",
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^25.0.8",

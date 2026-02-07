@@ -10,6 +10,91 @@ import {
 } from "../controllers/admin.controller.js";
 import { adminOnly } from "../middleware/admin.auth.middlware.js";
 
+/**
+ * @swagger
+ * /api/admin/dashboard:
+ *   get:
+ *     summary: Get admin dashboard data
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dashboard data
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ */
+
+/**
+ * @swagger
+ * /api/admin/recruiters:
+ *   get:
+ *     summary: Get all recruiters
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all recruiters
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ */
+
+/**
+ * @swagger
+ * /api/admin/jobseekers:
+ *   get:
+ *     summary: Get all jobseekers
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all jobseekers
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ */
+
+/**
+ * @swagger
+ * /api/admin/jobs:
+ *   get:
+ *     summary: Get all jobs
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all jobs
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ */
+
+/**
+ * @swagger
+ * /api/admin/applications:
+ *   get:
+ *     summary: Get all applications
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all applications
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ */
+
 const adminRouter = express.Router();
 adminRouter.use(adminOnly);
 

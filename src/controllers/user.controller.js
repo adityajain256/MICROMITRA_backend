@@ -20,6 +20,19 @@ export const handleGetProfile = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
+      include: {
+        recruter: {
+          select: {
+            jobs: true,
+          },
+        },
+
+        jobSeeker: {
+          select: {
+            applications: true,
+          },
+        },
+      },
     });
     if (!user) {
       return res.status(404).json({ error: "user not found" });
@@ -79,5 +92,25 @@ export const handleUploadProfilePicture = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "internal server error" });
     console.error("Error uploading profile picture:", error);
+  }
+};
+
+export const handleUpdateRole = async (req, res) => {
+  const { role } = req.body;
+  if (!role) {
+    return res.status(400).json({ error: "Role is required" });
+  }
+
+  try {
+    const updateduser = await prisma.user.update({
+      where: { id: req.user.id },
+      data: { role },
+    });
+    res.status(200).json({ message: updateduser });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "internal server error", details: error.message });
+    console.error("Error updating user role:", error);
   }
 };
