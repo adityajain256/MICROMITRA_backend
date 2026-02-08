@@ -77,7 +77,12 @@ export const handleLoginUser = async (req, res) => {
     });
     res
       .status(200)
-      .json({ message: "login successful", token: token, ok: true });
+      .json({
+        message: "login successful",
+        token: token,
+        ok: true,
+        user: user,
+      });
   } catch (error) {
     res.status(500).json({ error: "internal server error" });
     console.error("Error during user login:", error);

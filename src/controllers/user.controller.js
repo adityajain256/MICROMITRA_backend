@@ -29,7 +29,11 @@ export const handleGetProfile = async (req, res) => {
 
         jobSeeker: {
           select: {
-            applications: true,
+            applications: {
+              include: {
+                job: true,
+              },
+            },
           },
         },
       },
