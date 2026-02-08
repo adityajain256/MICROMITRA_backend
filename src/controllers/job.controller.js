@@ -90,3 +90,72 @@ export const handleGetMyJobs = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const handleGetJob = async (req, res) => {
+  const jobId = parseInt(req.params.id);
+  try {
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+      include: {
+        applications: {
+          include: {
+            jobSeeker: {
+              include: {
+                user: {
+                  select: {
+                    name: true,
+                    email: true,
+                    city: true,
+                    phone: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    // skills: true,
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+    res.status(200).json({ job });
+  } catch (error) {
+    console.error("Error fetching job:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const handleCloseJob = async (req, res) => {
+  const jobId = parseInt(req.params.id);
+  try {
+    const job = await prisma.job.update({
+      where: { id: jobId },
+      data: {
+        jobStatus: "CLOSED",
+      },
+    });
+    await prisma.application.deleteMany({
+      where: {
+        jobId: jobId,
+        OR: [{ status: "REJECTED" }, { status: "PENDING" }],
+      },
+    });
+    res.status(200).json({ message: "Job closed successfully", job });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const jobDelete = async (req, res) => {
+  const jobId = parseInt(req.params.id);
+  try {
+    await prisma.job.delete({
+      where: { id: jobId },
+    });
+    res.status(200).json({ message: "Job deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};

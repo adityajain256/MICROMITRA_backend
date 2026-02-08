@@ -1,10 +1,13 @@
 import express from "express";
 import { authUser } from "../middleware/auth.middleware.js";
 import {
+  handleCloseJob,
   handlecreateJob,
   handleGetAllJobs,
+  handleGetJob,
   handleGetMyJobs,
 } from "../controllers/job.controller.js";
+import { checkRecruiter } from "../middleware/roleCheck.middleware.js";
 
 /**
  * @swagger
@@ -76,5 +79,6 @@ const jobRouter = express.Router();
 jobRouter.get("/", handleGetAllJobs);
 jobRouter.get("/myJobs", authUser, handleGetMyJobs);
 jobRouter.post("/", authUser, handlecreateJob);
-
+jobRouter.get("/job/:id", checkRecruiter, handleGetJob);
+jobRouter.patch("/job/:id/close", checkRecruiter, handleCloseJob);
 export default jobRouter;
