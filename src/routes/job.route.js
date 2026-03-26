@@ -8,6 +8,7 @@ import {
   handleGetMyJobs,
 } from "../controllers/job.controller.js";
 import { checkRecruiter } from "../middleware/roleCheck.middleware.js";
+import upload from "../middleware/upload.middleware.js";
 
 /**
  * @swagger

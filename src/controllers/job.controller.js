@@ -1,6 +1,7 @@
 import prisma from "../../connection/prisma.js";
 
 export const handleGetAllJobs = async (req, res) => {
+  
   try {
     const jobs = await prisma.job.findMany({
       orderBy: { createdAt: "desc" },
@@ -9,12 +10,18 @@ export const handleGetAllJobs = async (req, res) => {
           select: {
             id: true,
             company: true,
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
           },
         },
         skills: true,
       },
     });
-    // console.log(jobs);
+    console.log(jobs);
     res.status(200).json({ jobs });
   } catch (error) {
     console.error("Error fetching jobs:", error);

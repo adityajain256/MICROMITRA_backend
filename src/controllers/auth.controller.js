@@ -4,6 +4,18 @@ import jwt from "jsonwebtoken";
 
 export const handleRegisterUser = async (req, res) => {
   const { email, name, password, phone, role, city } = req.body;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: "invalid email format" });
+  }
+  if (phone.length < 10 || phone.length > 10) {
+    return res.status(400).json({ error: "invalid phone number" });
+  }
+  if (password.length < 8) {
+    return res
+      .status(400)
+      .json({ error: "password must be at least 8 characters long" });
+  }
   if (!email || !name || !password || !phone || !role) {
     return res.status(400).json({ error: "bad request" });
   }
@@ -75,14 +87,12 @@ export const handleLoginUser = async (req, res) => {
       secure: process.env.ENVIRONMENT === "production",
       sameSite: "Strict",
     });
-    res
-      .status(200)
-      .json({
-        message: "login successful",
-        token: token,
-        ok: true,
-        user: user,
-      });
+    res.status(200).json({
+      message: "login successful",
+      token: token,
+      ok: true,
+      user: user,
+    });
   } catch (error) {
     res.status(500).json({ error: "internal server error" });
     console.error("Error during user login:", error);
